@@ -1,13 +1,109 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/style/style.css">
-    <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/48938155eb24b4ccdde09426066869504c6dab3c/dist/css/bootstrap.min.css">
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
-  </head>
-  <body>
-    <div class="container"></div>
-  </body>
-  <script src="/bundle.js"></script>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Hotels :: React</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <style>
+            .primary-text-display {
+                border: solid 1px #eee;
+                border-radius: 5px;
+                padding: 5px;
+                position: relative;
+                padding-right: 50px;
+
+                font-size: 20px;
+            }
+
+            .primary-text-display .glyphicon-menu-down {
+                position: absolute;
+                right: 10px; top: 6px;
+                font-size: 27px;
+                color: #7b7676;
+            }
+
+            .roomGuest-modal {
+                /*display: none;*/
+                background-color: #831061;
+                padding: 20px;
+                border-radius: 20px;
+                margin: 20px 0px;
+                color: white;
+            }
+
+            button, input {
+                color: black;
+            }
+
+            button.close {
+                float: none;
+                display: block;
+                text-align: right;
+                color: white;
+                opacity: .7;
+                margin-bottom: 25px;
+                width: 100%;
+            }
+            button.close:hover {
+                opacity: 1;
+            }
+
+            button:disabled {
+                opacity: .4;
+            }
+
+            .room {
+                border-top: solid 2px #630a49;
+                border-bottom: solid 2px #630a49;
+                margin: 20px 0px;
+                padding: 10px 20px 20px ;
+            }
+            .room h2 { margin: 0px; }
+
+            .done {
+                text-decoration:line-through;
+                opacity: .5;
+            }
+
+            .peopleCount {
+                background-color: white;
+                display: inline-block;
+                width: 50px;
+                color: black;
+                text-align: center;
+                font-size: 14px;
+            }
+            .addSubtract {
+                margin-right: 10px;
+            }
+
+            .addSubtractAdultsChildren {
+                display: flex;
+            }
+            .addSubtractAdultsChildren .set {
+                width: 30%;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Hotels :: React</h1>
+
+            <div class="busReq">
+                <p>Requirements</p>
+                <ul>
+                    <li class="done">Cannot exceed 4 Rooms</li>
+                    <li>At least 1 Adult per room</li>
+                    <li>Cannot exceed 6 Guests (adults and children combined)</li>
+                </ul>
+            </div>
+
+            <div class="hotelRoomsGuests"></div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	    <script src="/bundle.js"></script>
+    </body>
 </html>

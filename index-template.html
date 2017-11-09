@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Passengers :: React</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <style>
+			
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Passengers :: React</h1>
+
+            <div class="hotels">
+                <div class="passengers">
+                    <!-- REPLACED BY REACT START-->
+                    <div class="master-display-input">
+                        <input type="text" name="passengers" value="1 Room, 2 Adults">
+                        <span class="glyphicon glyphicon-menu-down"></span>
+                    </div>
+                    <div class="modal">
+                        <div class="close">X</div>
+                        <div class="rooms">
+                            <div class="room room1">
+                                <h2>Room 1</h2>
+                                <div class="adults">
+                                    <label for="">Adults (18-64)</label>
+                                    <div class="controls addSubtract">
+                                        <button type="button" class="subtract">-</button>
+                                        <input type="text" name="room1['adults'][]" value="">
+                                        <button type="button" class="add">+</button>
+                                    </div>
+                                </div>
+                                <div class="children">
+                                    <label for="">Children (0-17)</label>
+                                    <div class="controls addSubtract">
+                                        <button type="button" class="subtract">-</button>
+                                        <input type="text" name="room1['children'][]" value="">
+                                        <button type="button" class="add">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="addRoom">+ Add Room</button>
+                    </div>
+                    <!-- REPLACED BY REACT END -->
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	    <script src="/bundle.js"></script>
+    </body>
+</html>
