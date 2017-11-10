@@ -7,37 +7,54 @@ import ReactDOM from 'react-dom'; //Manages the DOM views. (Shadow Dom)
 
 /* My Personal Components -------------------------------*/
 import Room from './components/room'; //no need to add .jsx
+// import PropTypes from 'proptypes'; //get this package - for validation - to ensure integrity of data
 
 /*-------------------------------------
 | Create an component that produces HTML
 -------------------------------------*/
 /* New ES6 syntax which also changes the nature of the "this" keyword -------------------------------*/
 class HotelsRoomsGuests extends Component {
+	// static propTypes = {
+	// 	maxRooms : PropTypes.number.isRequired,
+	// 	minRooms: PropTypes.number.isRequired,
+    //
+	// }
+
+	// Props hold non-changing values for example min and max numbers - this can also be handled by redux.
+	static deafultProps = {
+        roomsMin: 1,
+		roomsMax: 4,
+		roomsAdultsMin: 1, //every room must have 1 adult
+		guestsMax: 6,
+	}
+
     constructor(props) {
         super(props);
 
         // default states to keep track of. These states, when updated, will impact all that are bound to it.
 		this.state = {
-            displayText: '1 Room, 1 Adult',
-            rooms: {
-                rooms: [
-                    <Room
-                        key={'room0'}
-                        roomIndex={0}
-                        roomNum={1}
-                        rootThis={this}
-                    />
-                ],
-                max: 4,
-                min: 1
-            },
-            people: {
-                adults: 1,
-                children: 0,
-                max: 6,
-                min: 1,
-            },
+			rooms: [
+				{
+					adults: 0,
+					children: [ 1, 3 ,5 ] //no need to store count, we can use length.
+				},
+				{
+					adults: 0,
+					children: [ 1, 3 ,5 ]
+				}
+			]
         };
+
+        /*-------------------------------------
+        | Get Count of Adults and Children
+        -------------------------------------*/
+        // rooms.reducer((i, room)=>{
+        //     return i + room.adults;
+        // }, 0);
+        //
+        // rooms.reducer((i, room)=>{
+        //     return i + room.children.length;
+        // }, 0);
     }
 
     // Add Adult to Adult count
@@ -56,23 +73,37 @@ class HotelsRoomsGuests extends Component {
 	updateDisplayText = () => {
         console.log('Update Display Text');
         let newDisplayText = '1 Room, 1 Adult'; //default
-        let totalGuests = this.state.people.children + this.state.people.adults;
-        let totalRooms = this.state.rooms.rooms.length;
-        let pluralGuests = (totalGuests > 1) ? 's':'';
-        let pluralRooms = (totalRooms > 1) ? 's':'';
-
-        if (this.state.people.children > 0)
-        {
-            newDisplayText = `${totalRooms} Room${pluralRooms}, ${totalGuests} Guests`;
-        }
-        else
-        {
-            newDisplayText = `${totalRooms} Room${pluralRooms}, ${totalGuests} Adult${pluralGuests}`;
-        }
-
-		this.setState({ displayText: newDisplayText });
+        // let totalGuests = this.state.people.children + this.state.people.adults;
+        // let totalRooms = this.state.rooms.rooms.length;
+        // let pluralGuests = (totalGuests > 1) ? 's':'';
+        // let pluralRooms = (totalRooms > 1) ? 's':'';
+        //
+        // if (this.state.people.children > 0)
+        // {
+        //     newDisplayText = `${totalRooms} Room${pluralRooms}, ${totalGuests} Guests`;
+        // }
+        // else
+        // {
+        //     newDisplayText = `${totalRooms} Room${pluralRooms}, ${totalGuests} Adult${pluralGuests}`;
+        // }
+        return newDisplayText;
+		// this.setState({ displayText: newDisplayText });
 	};
 
+    /*-------------------------------------
+    | @ childKey int :: Key of the child that is sending the request
+    | @ num int :: positive or negative number to add or subtract adults
+    -------------------------------------*/
+    addSubtract_adults(childKey, num) {
+        console.log('Adding or Subtracting Adult');
+    }
+    addSubtract_children() {
+        console.log('Adding or Subtracting Children');
+    }
+
+	/*-------------------------------------
+	| Adding and Subtracting Rooms
+	-------------------------------------*/
     roomAdd = () => {
         let numRooms = this.state.rooms.rooms.length;
         let maxRooms = this.state.rooms.max;
@@ -144,8 +175,6 @@ class HotelsRoomsGuests extends Component {
             $('.roomMinus').prop("disabled",true);
             console.log('You hit the min rooms');
         }
-
-
     }
     modalShow = () => {
         // $('.roomGuest-modal').show();
@@ -162,22 +191,31 @@ class HotelsRoomsGuests extends Component {
                 <div
                     onClick={ () => this.modalShow() }
                     className="primary-text-display">
-    	            <div className="displayText">{this.state.displayText}</div>
+    	            <div className="displayText">{ this.updateDisplayText() }</div>
     	            <span className="glyphicon glyphicon-menu-down"></span>
     	        </div>
                 <div className="roomGuest-modal">
                     <div className="stats">
-                        <span> <b>Rooms: </b> { this.state.rooms.rooms.length }</span>
-                        <span> <b>Guests: </b> { (this.state.people.adults + this.state.people.children) }</span>
-                        <span> <b>Adults: </b> { this.state.people.adults }</span>
-                        <span> <b>Children: </b> { this.state.people.children }</span>
+                        <span> <b>Rooms: </b> { this.state.rooms.length }</span>
+                        <span> <b>Guests: </b> TBD</span>
+                        <span> <b>Adults: </b> TBD</span>
+                        <span> <b>Children: </b> TBD</span>
                     </div>
 
                     <button
                         onClick={ () => this.modalHide() }
                         className="close">X</button>
 
-                    <div className="rooms"> { this.state.rooms.rooms } </div>
+                    <div className="rooms">
+                        <Room
+                            key={'room1'}
+                            roomNum={1}
+                            adults={1}
+                            children={0}
+                            addSubtract_adults={this.addSubtract_adults}
+                            addSubtract_children={this.addSubtract_children}
+                        />
+                    </div>
 
                     <button
                         onClick={ () => this.roomAdd() }
