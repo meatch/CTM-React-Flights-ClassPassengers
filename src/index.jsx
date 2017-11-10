@@ -32,16 +32,13 @@ class HotelsRoomsGuests extends Component {
         super(props);
 		this.addSubtract_adults = this.addSubtract_adults.bind(this);
 		this.addSubtract_children = this.addSubtract_children.bind(this);
+		this.updateChildAge = this.updateChildAge.bind(this);
 
         // default states to keep track of. These states, when updated, will impact all that are bound to it.
 		this.state = {
 			rooms: [
 				{
 					adults: 1,
-					children: [] //no need to store count, we can use length.
-				},
-				{
-					adults: 2,
 					children: [] //no need to store count, we can use length.
 				}
             ],
@@ -81,33 +78,49 @@ class HotelsRoomsGuests extends Component {
 	updateDisplayText = () => {
         // console.log('Update Display Text');
         let newDisplayText = '1 Room, 1 Adult'; //default
-        // let totalGuests = this.state.people.children + this.state.people.adults;
-        // let totalRooms = this.state.rooms.rooms.length;
-        // let pluralGuests = (totalGuests > 1) ? 's':'';
-        // let pluralRooms = (totalRooms > 1) ? 's':'';
-        //
-        // if (this.state.people.children > 0)
-        // {
-        //     newDisplayText = `${totalRooms} Room${pluralRooms}, ${totalGuests} Guests`;
-        // }
-        // else
-        // {
-        //     newDisplayText = `${totalRooms} Room${pluralRooms}, ${totalGuests} Adult${pluralGuests}`;
-        // }
+
+        // Guests
+		let totalAdults = this.adultCount();
+		let totalChildren = this.childCount();
+        let totalGuests = totalAdults + totalChildren;
+        let pluralGuests = (totalGuests > 1) ? 's':'';
+
+        // Rooms
+		let totalRooms = this.state.rooms.length;
+        let pluralRooms = (totalRooms > 1) ? 's':'';
+
+        // Evaluate and render
+        if (totalChildren > 0)
+        {
+            newDisplayText = `${totalRooms} Room${pluralRooms}, ${totalGuests} Guests`;
+        }
+        else
+        {
+            newDisplayText = `${totalRooms} Room${pluralRooms}, ${totalGuests} Adult${pluralGuests}`;
+        }
+
         return newDisplayText;
-		// this.setState({ displayText: newDisplayText });
+		this.setState({ rooms });
 	};
 
 	/*-------------------------------------
 	| Show and Hide Modal
 	-------------------------------------*/
-    modalShow = () => {
-        // $('.roomGuest-modal').show();
-    }
+    modalShow = () => { $('.roomGuest-modal').show(); }
+    modalHide = () => { $('.roomGuest-modal').hide(); }
 
-    modalHide = () => {
-        // $('.roomGuest-modal').hide();
-    }
+	storeState() {
+		console.log('Storing State');
+		let rooms  = this.state.rooms;
+		this.setState({ roomsSavedState: rooms });
+	}
+
+	resetToLastSavedState() {
+		console.log('Re-Storing Last Saved State');
+		let roomsSavedState  = this.state.roomsSavedState;
+		this.setState({ rooms: roomsSavedState });
+		this.modalHide();
+	}
 
     rooms_render() {
         return this.state.rooms.map((room, i) => (
@@ -119,6 +132,7 @@ class HotelsRoomsGuests extends Component {
                 children={room.children}
                 addSubtract_adults={this.addSubtract_adults}
                 addSubtract_children={this.addSubtract_children}
+                updateChildAge={this.updateChildAge}
             />
         ))
     }
@@ -181,10 +195,7 @@ class HotelsRoomsGuests extends Component {
     | @ plusMinus int :: positive or negative plusMinusber to add or subtract adults
     -------------------------------------*/
     addSubtract_adults(roomIndex, plusMinus) {
-        console.log('Adults ' + plusMinus);
-
 		let rooms = this.state.rooms;
-		console.log([roomIndex, 'Before: ' + rooms[roomIndex].adults]);
 
 		if (plusMinus === 'plus')
 		{
@@ -202,16 +213,11 @@ class HotelsRoomsGuests extends Component {
 				rooms[roomIndex].adults--;
 			}
 		}
-
-		console.log([roomIndex, 'After: ' + rooms[roomIndex].adults]);
         this.setState({rooms: rooms});
     }
 
     addSubtract_children(roomIndex, plusMinus) {
-        console.log('Children ' + plusMinus);
-
 		let rooms = this.state.rooms;
-		console.log([roomIndex, 'Before: ' + rooms[roomIndex].children.length]);
 
 		if (plusMinus === 'plus')
 		{
@@ -230,9 +236,14 @@ class HotelsRoomsGuests extends Component {
 			}
 		}
 
-		console.log([roomIndex, 'After: ' + rooms[roomIndex].children.length]);
         this.setState({rooms: rooms});
     }
+
+	updateChildAge(roomIndex, childIndex, age) {
+		let rooms = this.state.rooms;
+		rooms[roomIndex].children[childIndex] = age;
+        this.setState({rooms: rooms});
+	}
 
     render() {
         return  (
@@ -245,14 +256,14 @@ class HotelsRoomsGuests extends Component {
     	        </div>
                 <div className="roomGuest-modal">
                     <div className="stats">
-                        <span> <b>Rooms: </b> { this.state.rooms.length }</span>
-                        <span> <b>Guests: </b> { this.guestCount() }</span>
-                        <span> <b>Adults: </b> TBD</span>
-                        <span> <b>Children: </b> TBD</span>
+                        <span> <b>{ this.state.rooms.length }</b> Rooms</span>
+                        <span> <b>{ this.guestCount() }</b> Guests</span>
+                        <span> <b>{ this.adultCount() }</b> Adults</span>
+                        <span> <b>{ this.childCount() }</b> Children</span>
                     </div>
 
                     <button
-                        onClick={ () => this.modalHide() }
+                        onClick={ () => this.resetToLastSavedState() }
                         className="close">X</button>
 
                     <div className="rooms">{ this.rooms_render() }</div>
@@ -265,6 +276,13 @@ class HotelsRoomsGuests extends Component {
                         onClick={ () => this.addSubtract_rooms('minus') }
                         type="button"
                         className="roomMinus">- Subtract Room</button>
+
+					<div className="store">
+						<button
+	                        onClick={ () => this.storeState() }
+	                        type="button">Continue</button>
+					</div>
+
                 </div>
             </div>
         );

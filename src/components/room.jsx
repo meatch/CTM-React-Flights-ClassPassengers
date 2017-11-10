@@ -4,6 +4,30 @@ import React from 'react';
 // Mine
 const Room = (room) => {
 
+    const childAgeOptions = Array.from(Array(18).keys()); //range from 0-17
+
+    const childAgeSelects = room.children.map((child, i) => {
+        return (
+            <select
+                key={i}
+                className="child form-control"
+                name="children[]"
+                onChange={ (event) => room.updateChildAge(room.index, i, parseInt(event.target.value)) }
+            >
+                {
+                    childAgeOptions.map((age) => {
+                        return (
+                            <option
+                                key={age}
+                                selected={age === child}
+                                value={age}>{age}</option>
+                        );
+                    })
+                }
+            </select>
+		);
+	});
+
     return (
         <div className="room">
             <h1>Room {room.roomNum} </h1>
@@ -40,6 +64,10 @@ const Room = (room) => {
                             onClick={ () => room.addSubtract_children(room.index, 'plus') }
                         >+</button>
                     </div>
+                    <div className="ages">
+                        { childAgeSelects }
+                    </div>
+
                 </div>
             </div>
         </div>
