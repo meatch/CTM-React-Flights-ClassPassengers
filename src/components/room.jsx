@@ -6,7 +6,7 @@ const Room = (room) => {
 
     return (
         <div className="room">
-            <h1>Room {room.roomNum}</h1>
+            <h1>Room {room.roomNum} </h1>
             <div className="addSubtractAdultsChildren">
                 <div className="set">
                     <label className="adults">Adults (18-64)</label>
@@ -14,13 +14,14 @@ const Room = (room) => {
                         <button
                             type="button"
                             className="subtract"
-                            onClick={ () => room.addSubtract_adults(room.key, 1) }
+                            onClick={ () => room.addSubtract_adults(room.index, 'minus') }
                         >-</button>
+
                         <div className="peopleCount">{room.adults}</div>
                         <button
                             type="button"
                             className="add"
-                            onClick={ () => room.addSubtract_adults(room.key, -1) }
+                            onClick={ () => room.addSubtract_adults(room.index, 'plus') }
                         >+</button>
                     </div>
                 </div>
@@ -30,13 +31,13 @@ const Room = (room) => {
                         <button
                             type="button"
                             className="subtract"
-                            onClick={ () => room.addSubtract_children(room.key, 1) }
+                            onClick={ () => room.addSubtract_children(room.index, 'minus') }
                         >-</button>
-                        <div className="peopleCount">{room.children}</div>
+                        <div className="peopleCount">{room.children.length}</div>
                         <button
                             type="button"
                             className="add"
-                            onClick={ () => room.addSubtract_children(room.key, -1) }
+                            onClick={ () => room.addSubtract_children(room.index, 'plus') }
                         >+</button>
                     </div>
                 </div>
