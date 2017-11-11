@@ -53,6 +53,10 @@ class HotelsRoomsGuests extends Component {
 				{
 					adults: 1,
 					children: [] //no need to store count, we can use length.
+				},
+				{
+					adults: 1,
+					children: [] //no need to store count, we can use length.
 				}
             ],
 			roomsSavedState: [
@@ -63,11 +67,11 @@ class HotelsRoomsGuests extends Component {
             ], //so when we revert back to last saved state
         };
 
-        // this.init(); //Question for Steve, is there an init for React?
+        // @TODO this.init(); //Question for Steve, is there an init for React?
     }
 
 	/*-------------------------------------
-	| Question for Steve, is there an init for React?
+	| @TODO Question for Steve, is there an init for React?
 	-------------------------------------*/
     // init = () => {
     //     this.setState({roomsSaved: this.state.rooms});
@@ -88,7 +92,12 @@ class HotelsRoomsGuests extends Component {
         this.wrapperRef = node;
     }
 	handleClickOutside(event) {
-		if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+        // Need to allow the user to scroll the main window - this form can be vertically challenged.
+        // @TODO native JS?
+		// let clickedWindowScroll = ( window.offsetWidth <= event.clientX ) ? true:false;
+		let clickedWindowScroll = ( $(window).outerWidth() <= event.clientX ) ? true:false;
+
+		if (this.wrapperRef && !this.wrapperRef.contains(event.target) && !clickedWindowScroll) {
 			this.storeState();
         }
 	}
@@ -140,7 +149,6 @@ class HotelsRoomsGuests extends Component {
 
 	storeState() {
         // validate children ages
-		console.log('validate children ages');
 
 		this.state.errorMessages = [];
 
@@ -312,7 +320,6 @@ class HotelsRoomsGuests extends Component {
 		{
 			if (this.guestCount() !== this.props.guestsMax)
 			{
-				console.log('add a child');
 				//age is -1 to start, till they choose from the drop down.
 				// Used for validation too, they must choose and age
 				rooms[roomIndex].children.push(-1);
