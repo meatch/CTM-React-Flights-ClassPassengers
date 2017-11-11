@@ -44,6 +44,7 @@ class HotelsRoomsGuests extends Component {
 
         // default states to keep track of. These states, when updated, will impact all that are bound to it.
 		this.state = {
+			modalDisplay: 'hidden',
 			rooms: [
 				{
 					adults: 1,
@@ -58,20 +59,14 @@ class HotelsRoomsGuests extends Component {
             ], //so when we revert back to last saved state
         };
 
-		console.log(this.state);
-
-        // this.init();
+        // this.init(); //Question for Steve, is there an init for React?
     }
 
 	/*-------------------------------------
 	| Question for Steve, is there an init for React?
 	-------------------------------------*/
     // init = () => {
-    //     console.log('init');
-    //
     //     this.setState({roomsSaved: this.state.rooms});
-    //
-    //     console.log(this.state);
     // }
 
 	/*-------------------------------------
@@ -96,7 +91,6 @@ class HotelsRoomsGuests extends Component {
 
     // FAT ARROW FUNCTIONS CHANGES SCOPE OF KEYWORD THIS - to be scoped to this Class. Children Containers can use it too.
 	updateDisplayText = () => {
-        // console.log('Update Display Text');
         let newDisplayText = '1 Room, 1 Adult'; //default
 
         // Guests
@@ -120,24 +114,29 @@ class HotelsRoomsGuests extends Component {
         }
 
         return newDisplayText;
-		this.setState({ rooms });
 	};
 
 	/*-------------------------------------
 	| Show and Hide Modal
 	-------------------------------------*/
-    modalShow = () => { $('.roomGuest-modal').show(); }
-    modalHide = () => { $('.roomGuest-modal').hide(); }
+    modalShow = () => {
+		let modalDisplay = this.state.modalDisplay;
+		modalDisplay = '';
+		this.setState({ modalDisplay: modalDisplay });
+	}
+    modalHide = () => {
+		let modalDisplay = this.state.modalDisplay;
+		modalDisplay = 'hidden';
+		this.setState({ modalDisplay: modalDisplay });
+	}
 
 	storeState() {
-		console.log('Storing State');
 		let rooms = this.deep_clone(this.state.rooms);
 		this.setState({ roomsSavedState: rooms });
 		this.modalHide();
 	}
 
 	resetToLastSavedState() {
-		console.log('Re-Storing Last Saved State');
 		let roomsSavedState = this.deep_clone(this.state.roomsSavedState);
 		this.setState({ rooms: roomsSavedState });
 		this.modalHide();
@@ -169,8 +168,6 @@ class HotelsRoomsGuests extends Component {
             />
         ))
     }
-
-
 
 	/*-------------------------------------
 	| Cound number of guests, adults and children
@@ -209,18 +206,14 @@ class HotelsRoomsGuests extends Component {
 
 		if (plusMinus === 'plus' && roomCount !== this.props.roomsMax && !isMaxGuestCount)
 		{
-			// console.log('Add a room');
 			rooms.push({adults: 1,children: []});
 		}
 		else if (plusMinus === 'minus' && roomCount !== this.props.roomsMin)
 		{
-			// console.log('Minus a room');
 			rooms.pop(); //delete last room
 		}
 
         this.setState({rooms: rooms});
-
-        console.log([rooms.length, this.props.roomsMax, rooms]);
     }
 
     /*-------------------------------------
@@ -287,11 +280,11 @@ class HotelsRoomsGuests extends Component {
     	            <div className="displayText">{ this.updateDisplayText() }</div>
     	            <span className="glyphicon glyphicon-menu-down"></span>
     	        </div>
-                <div className="roomGuest-modal">
+                <div className={"roomGuest-modal " +  this.state.modalDisplay }>
                     <div className="stats">
-                        <span> <b>{ this.state.rooms.length }</b> Rooms</span>
-                        <span> <b>{ this.guestCount() }</b> Guests</span>
-                        <span> <b>{ this.adultCount() }</b> Adults</span>
+                        <span> <b>{ this.state.rooms.length }</b> Room(s)</span>
+                        <span> <b>{ this.guestCount() }</b> Guest(s)</span>
+                        <span> <b>{ this.adultCount() }</b> Adult(s)</span>
                         <span> <b>{ this.childCount() }</b> Children</span>
                     </div>
 
