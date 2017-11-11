@@ -30,9 +30,17 @@ class HotelsRoomsGuests extends Component {
 
     constructor(props) {
         super(props);
+
+		/*-------------------------------------
+		| A bunch of bindings to manage this scope
+		-------------------------------------*/
+		/* Sending to children -------------------------------*/
 		this.addSubtract_adults = this.addSubtract_adults.bind(this);
 		this.addSubtract_children = this.addSubtract_children.bind(this);
 		this.updateChildAge = this.updateChildAge.bind(this);
+		/* Clicking outside of component -------------------------------*/
+        this.setWrapperRef = this.setWrapperRef.bind(this);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
 
         // default states to keep track of. These states, when updated, will impact all that are bound to it.
 		this.state = {
@@ -52,20 +60,12 @@ class HotelsRoomsGuests extends Component {
 
 		console.log(this.state);
 
-        /*-------------------------------------
-        | Get Count of Adults and Children
-        -------------------------------------*/
-        // rooms.reducer((i, room)=>{
-        //     return i + room.adults;
-        // }, 0);
-        //
-        // rooms.reducer((i, room)=>{
-        //     return i + room.children.length;
-        // }, 0);
-
         // this.init();
     }
 
+	/*-------------------------------------
+	| Question for Steve, is there an init for React?
+	-------------------------------------*/
     // init = () => {
     //     console.log('init');
     //
@@ -73,6 +73,26 @@ class HotelsRoomsGuests extends Component {
     //
     //     console.log(this.state);
     // }
+
+	/*-------------------------------------
+	| Detect when user clicks outside of component
+	| https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
+	-------------------------------------*/
+    componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+    setWrapperRef(node) {
+        this.wrapperRef = node;
+    }
+	handleClickOutside(event) {
+		if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+			this.storeState();
+        }
+	}
 
     // FAT ARROW FUNCTIONS CHANGES SCOPE OF KEYWORD THIS - to be scoped to this Class. Children Containers can use it too.
 	updateDisplayText = () => {
@@ -111,15 +131,28 @@ class HotelsRoomsGuests extends Component {
 
 	storeState() {
 		console.log('Storing State');
-		let rooms  = this.state.rooms;
+		let rooms = this.deep_clone(this.state.rooms);
 		this.setState({ roomsSavedState: rooms });
+		this.modalHide();
 	}
 
 	resetToLastSavedState() {
 		console.log('Re-Storing Last Saved State');
-		let roomsSavedState  = this.state.roomsSavedState;
+		let roomsSavedState = this.deep_clone(this.state.roomsSavedState);
 		this.setState({ rooms: roomsSavedState });
 		this.modalHide();
+	}
+
+    // Cloining Arrays for Storing State
+	// https://stackoverflow.com/questions/597588/how-do-you-clone-an-array-of-objects-in-javascript
+	deep_clone(srcArray) {
+
+		/* faster, shallow copy - as references -------------------------------*/
+		// let rooms  = this.state.rooms.slice(0); //older approach
+		// let rooms  = [...this.state.rooms]; //es6 cloning array
+
+		/* JSON Approach - cannot be used if array contains methods, undefined, null -------------------------------*/
+		return JSON.parse(JSON.stringify(srcArray));
 	}
 
     rooms_render() {
@@ -247,7 +280,7 @@ class HotelsRoomsGuests extends Component {
 
     render() {
         return  (
-            <div>
+            <div ref={this.setWrapperRef}>
                 <div
                     onClick={ () => this.modalShow() }
                     className="primary-text-display">
