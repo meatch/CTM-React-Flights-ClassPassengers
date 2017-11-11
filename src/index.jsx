@@ -45,6 +45,8 @@ class HotelsRoomsGuests extends Component {
         // default states to keep track of. These states, when updated, will impact all that are bound to it.
 		this.state = {
 			modalDisplay: 'hidden',
+			showErrors: '',
+			errorMessages: [],
 			rooms: [
 				{
 					adults: 1,
@@ -84,6 +86,7 @@ class HotelsRoomsGuests extends Component {
         this.wrapperRef = node;
     }
 	handleClickOutside(event) {
+		console.log('clicking outside');
 		if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
 			this.storeState();
         }
@@ -116,24 +119,61 @@ class HotelsRoomsGuests extends Component {
         return newDisplayText;
 	};
 
+    // FAT ARROW FUNCTIONS CHANGES SCOPE OF KEYWORD THIS - to be scoped to this Class. Children Containers can use it too.
+	errorMessages = () => {
+        let errorMessages = this.state.errorMessages.map((message) => {
+			return <li>{message}</li>;
+		});
+        return errorMessages;
+	};
+
 	/*-------------------------------------
 	| Show and Hide Modal
 	-------------------------------------*/
     modalShow = () => {
-		let modalDisplay = this.state.modalDisplay;
-		modalDisplay = '';
-		this.setState({ modalDisplay: modalDisplay });
+		this.setState({ modalDisplay: '' });
 	}
     modalHide = () => {
-		let modalDisplay = this.state.modalDisplay;
-		modalDisplay = 'hidden';
-		this.setState({ modalDisplay: modalDisplay });
+		this.setState({ modalDisplay: 'hidden' });
 	}
 
 	storeState() {
-		let rooms = this.deep_clone(this.state.rooms);
-		this.setState({ roomsSavedState: rooms });
-		this.modalHide();
+        // validate children ages
+		console.log('validate children ages');
+
+		this.state.errorMessages = [];
+
+		if (this.hasChildAges())
+		{
+			this.setState({ showErrors: '' });
+			let rooms = this.deep_clone(this.state.rooms);
+			this.setState({ roomsSavedState: rooms });
+			this.modalHide();
+		}
+		else
+		{
+			this.setState({ showErrors: 'showErrors' });
+			this.state.errorMessages.push('Please provide ages for all Children');
+		}
+
+	}
+	/*-------------------------------------
+	| See if user has provided ages for all children
+	-------------------------------------*/
+	hasChildAges() {
+		let hasChildAges= true;
+		let rooms = this.state.rooms;
+
+		rooms.forEach((room)=>{
+			room.children.forEach((child)=>{
+				if (child === -1)
+				{
+					hasChildAges = false;
+				}
+			});
+		});
+
+		return hasChildAges;
 	}
 
 	resetToLastSavedState() {
@@ -251,7 +291,9 @@ class HotelsRoomsGuests extends Component {
 			let guestsMax = this.props.guestsMax;
 			if (guestCount !== guestsMax)
 			{
-				rooms[roomIndex].children.push(0); //age is zero to start, till they choose from the drop down.
+				//age is -1 to start, till they choose from the drop down.
+				// Used for validation too, they must choose and age
+				rooms[roomIndex].children.push(-1);
 			}
 		}
 		else if (plusMinus === 'minus')
@@ -268,12 +310,19 @@ class HotelsRoomsGuests extends Component {
 	updateChildAge(roomIndex, childIndex, age) {
 		let rooms = this.state.rooms;
 		rooms[roomIndex].children[childIndex] = age;
+
+        // see if we are currently showing errors, and re-evaluate to hide errors if user has corrected errors
+		if (this.state.showErrors === 'showErrors' && this.hasChildAges())
+		{
+			this.state.showErrors = '';
+		}
+
         this.setState({rooms: rooms});
 	}
 
     render() {
         return  (
-            <div ref={this.setWrapperRef}>
+            <div ref={this.setWrapperRef} className={"HotelsRoomsGuests " +  this.state.showErrors }>
                 <div
                     onClick={ () => this.modalShow() }
                     className="primary-text-display">
@@ -281,6 +330,9 @@ class HotelsRoomsGuests extends Component {
     	            <span className="glyphicon glyphicon-menu-down"></span>
     	        </div>
                 <div className={"roomGuest-modal " +  this.state.modalDisplay }>
+
+
+
                     <div className="stats">
                         <span> <b>{ this.state.rooms.length }</b> Room(s)</span>
                         <span> <b>{ this.guestCount() }</b> Guest(s)</span>
@@ -291,6 +343,14 @@ class HotelsRoomsGuests extends Component {
                     <button
                         onClick={ () => this.resetToLastSavedState() }
                         className="close">X</button>
+
+
+					<div className="errorMessage">
+						<ul>
+							{ this.errorMessages() }
+						</ul>
+					</div>
+
 
                     <div className="rooms">{ this.rooms_render() }</div>
 

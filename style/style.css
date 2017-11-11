@@ -87,3 +87,11 @@ button:disabled {
 }
 .stats b { font-size: 40px; color: white; }
 
+.errorMessage { display: none; }
+.showErrors .errorMessage {
+	display: block;
+}
+.showErrors .missing {
+	outline: solid 3px red;
+}
+

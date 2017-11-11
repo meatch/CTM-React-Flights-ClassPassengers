@@ -7,13 +7,17 @@ const Room = (room) => {
     const childAgeOptions = Array.from(Array(18).keys()); //range from 0-17
 
     const childAgeSelects = room.children.map((child, i) => {
+
+        let missing = (child === -1) ? ' missing':'';
+
         return (
             <select
                 key={i}
-                className="child form-control"
+                className={"child form-control" +  missing}
                 name="children[]"
                 onChange={ (event) => room.updateChildAge(room.index, i, parseInt(event.target.value)) }
             >
+                <option key="default" value="-1">--</option>
                 {
                     childAgeOptions.map((age) => {
                         return (
