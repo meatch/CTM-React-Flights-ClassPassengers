@@ -47,6 +47,8 @@ class HotelsRoomsGuests extends Component {
 			modalDisplay: 'hidden',
 			showErrors: '',
 			errorMessages: [],
+			isMaxGuests: false,
+			isMaxRooms: false,
 			rooms: [
 				{
 					adults: 1,
@@ -86,7 +88,6 @@ class HotelsRoomsGuests extends Component {
         this.wrapperRef = node;
     }
 	handleClickOutside(event) {
-		console.log('clicking outside');
 		if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
 			this.storeState();
         }
@@ -200,6 +201,7 @@ class HotelsRoomsGuests extends Component {
                 key={i}
                 index={i}
                 roomNum={i+1}
+				isMaxGuests={this.state.isMaxGuests}
                 adults={room.adults}
                 children={room.children}
                 addSubtract_adults={this.addSubtract_adults}
@@ -235,41 +237,55 @@ class HotelsRoomsGuests extends Component {
 	}
 
 	/*-------------------------------------
+	| Have we hit our max guest count yet?
+	-------------------------------------*/
+	isMaxRoomsAndGuests() {
+        // check guest count first
+		let guestCount = this.guestCount();
+		let guestsMax = this.props.guestsMax;
+		let isMaxGuests = (guestCount === guestsMax) ? true:false;
+
+		this.setState({isMaxGuests: isMaxGuests});
+
+        // check room count second - can't add room if we hit our guest max
+		let isMaxRooms = (isMaxGuests || this.state.rooms.length === this.props.maxRooms) ? true:false;
+		this.setState({isMaxRooms: isMaxRooms});
+	}
+
+	/*-------------------------------------
 	| Adding and Subtracting Rooms
     | @ plusMinus str :: plus or minus
 	-------------------------------------*/
     addSubtract_rooms = (plusMinus) => {
 		let rooms = this.state.rooms;
-		let roomCount = rooms.length;
 
-		let isMaxGuestCount = (this.guestCount() === this.props.guestsMax) ? true:false;
-
-		if (plusMinus === 'plus' && roomCount !== this.props.roomsMax && !isMaxGuestCount)
+		if (plusMinus === 'plus' && !this.state.isMaxRooms)
 		{
 			rooms.push({adults: 1,children: []});
+			this.isMaxRoomsAndGuests(); //after adding did we hit our max guest count?
 		}
-		else if (plusMinus === 'minus' && roomCount !== this.props.roomsMin)
+		else if (plusMinus === 'minus' && this.state.rooms.length !== this.props.roomsMin)
 		{
 			rooms.pop(); //delete last room
+			this.isMaxRoomsAndGuests(); //after adding did we hit our max guest count?
 		}
 
         this.setState({rooms: rooms});
     }
 
-    /*-------------------------------------
-    | @ roomIndex int :: Index Key of the child that is sending the request - so we can update the appropriate values
-    | @ plusMinus int :: positive or negative plusMinusber to add or subtract adults
-    -------------------------------------*/
-    addSubtract_adults(roomIndex, plusMinus) {
+	/*-------------------------------------
+	| @ roomIndex int :: Index Key of the child that is sending the request - so we can update the appropriate values
+	| @ plusMinus int :: positive or negative plusMinu to add or subtract adults
+	-------------------------------------*/
+	addSubtract_adults(roomIndex, plusMinus) {
 		let rooms = this.state.rooms;
 
 		if (plusMinus === 'plus')
 		{
-			let guestCount = this.guestCount();
-			let guestsMax = this.props.guestsMax;
-			if (guestCount !== guestsMax)
+			if (this.guestCount() !== this.props.guestsMax)
 			{
 				rooms[roomIndex].adults++;
+				this.isMaxRoomsAndGuests();
 			}
 		}
 		else if (plusMinus === 'minus')
@@ -277,23 +293,30 @@ class HotelsRoomsGuests extends Component {
 			if (rooms[roomIndex].adults > 1) //must have at least 1 adult per room.
 			{
 				rooms[roomIndex].adults--;
+				this.isMaxRoomsAndGuests();
 			}
 		}
         this.setState({rooms: rooms});
     }
 
+
+
+	/*-------------------------------------
+	| @ roomIndex int :: Index Key of the child that is sending the request - so we can update the appropriate values
+	| @ plusMinus int :: positive or negative plusMinus to add or subtract adults
+	-------------------------------------*/
     addSubtract_children(roomIndex, plusMinus) {
 		let rooms = this.state.rooms;
 
 		if (plusMinus === 'plus')
 		{
-			let guestCount = this.guestCount();
-			let guestsMax = this.props.guestsMax;
-			if (guestCount !== guestsMax)
+			if (this.guestCount() !== this.props.guestsMax)
 			{
+				console.log('add a child');
 				//age is -1 to start, till they choose from the drop down.
 				// Used for validation too, they must choose and age
 				rooms[roomIndex].children.push(-1);
+				this.isMaxRoomsAndGuests(); //after adding did we hit our max guest count?
 			}
 		}
 		else if (plusMinus === 'minus')
@@ -301,6 +324,7 @@ class HotelsRoomsGuests extends Component {
 			if (rooms[roomIndex].children.length > 0) //ok to have no children
 			{
 				rooms[roomIndex].children.pop();
+				this.isMaxRoomsAndGuests();
 			}
 		}
 
@@ -331,9 +355,7 @@ class HotelsRoomsGuests extends Component {
     	        </div>
                 <div className={"roomGuest-modal " +  this.state.modalDisplay }>
 
-
-
-                    <div className="stats">
+					<div className="stats">
                         <span> <b>{ this.state.rooms.length }</b> Room(s)</span>
                         <span> <b>{ this.guestCount() }</b> Guest(s)</span>
                         <span> <b>{ this.adultCount() }</b> Adult(s)</span>
@@ -343,7 +365,6 @@ class HotelsRoomsGuests extends Component {
                     <button
                         onClick={ () => this.resetToLastSavedState() }
                         className="close">X</button>
-
 
 					<div className="errorMessage">
 						<ul>
@@ -355,10 +376,12 @@ class HotelsRoomsGuests extends Component {
                     <div className="rooms">{ this.rooms_render() }</div>
 
                     <button
+						disabled={this.state.isMaxRooms}
                         onClick={ () => this.addSubtract_rooms('plus') }
                         type="button"
                         className="roomAdd">+ Add Room</button>
                     <button
+						disabled={this.state.rooms.length === 1}
                         onClick={ () => this.addSubtract_rooms('minus') }
                         type="button"
                         className="roomMinus">- Subtract Room</button>

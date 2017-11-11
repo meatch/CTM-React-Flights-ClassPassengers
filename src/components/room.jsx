@@ -40,6 +40,7 @@ const Room = (room) => {
                     <label className="adults">Adults (18-64)</label>
                     <div className="controls addSubtract">
                         <button
+                            disabled={(room.adults === 1)}
                             type="button"
                             className="subtract"
                             onClick={ () => room.addSubtract_adults(room.index, 'minus') }
@@ -47,6 +48,7 @@ const Room = (room) => {
 
                         <div className="peopleCount">{room.adults}</div>
                         <button
+                            disabled={room.isMaxGuests}
                             type="button"
                             className="add"
                             onClick={ () => room.addSubtract_adults(room.index, 'plus') }
@@ -57,12 +59,14 @@ const Room = (room) => {
                     <label className="children">Children (0-17)</label>
                     <div className="controls addSubtract">
                         <button
+                            disabled={(room.children.length === 0)}
                             type="button"
                             className="subtract"
                             onClick={ () => room.addSubtract_children(room.index, 'minus') }
                         >-</button>
                         <div className="peopleCount">{room.children.length}</div>
                         <button
+                            disabled={room.isMaxGuests}
                             type="button"
                             className="add"
                             onClick={ () => room.addSubtract_children(room.index, 'plus') }
