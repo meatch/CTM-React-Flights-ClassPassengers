@@ -15,6 +15,7 @@ const Room = (room) => {
                 key={i}
                 className={"child form-control" +  missing}
                 name="children[]"
+                value={child}
                 onChange={ (event) => room.updateChildAge(room.index, i, parseInt(event.target.value)) }
             >
                 <option key="default" value="-1">--</option>
@@ -23,7 +24,6 @@ const Room = (room) => {
                         return (
                             <option
                                 key={age}
-                                selected={age === child}
                                 value={age}>{age}</option>
                         );
                     })
@@ -32,9 +32,25 @@ const Room = (room) => {
 		);
 	});
 
+    /*-------------------------------------
+    | Remove Room Button
+    -------------------------------------*/
+    let removeRoomButton = '';
+    if (room.index > 0)
+    {
+        removeRoomButton = <button
+            disabled={room.subtrRoomDisabled}
+            onClick={ () => room.subtract_rooms(room.index) }
+            type="button"
+            className="roomMinus">- Remove</button>
+    }
+
     return (
         <div className="room">
-            <h1>Room {room.roomNum} </h1>
+            <div className="title">
+                <h1>Room {room.roomNum}</h1>
+                { removeRoomButton }
+            </div>
             <div className="addSubtractAdultsChildren">
                 <div className="set">
                     <label className="adults">Adults (18-64)</label>
@@ -75,7 +91,6 @@ const Room = (room) => {
                     <div className="ages">
                         { childAgeSelects }
                     </div>
-
                 </div>
             </div>
         </div>

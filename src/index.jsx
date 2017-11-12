@@ -37,14 +37,17 @@ class HotelsRoomsGuests extends Component {
 		/* Sending to children -------------------------------*/
 		this.addSubtract_adults = this.addSubtract_adults.bind(this);
 		this.addSubtract_children = this.addSubtract_children.bind(this);
+		this.subtract_rooms = this.subtract_rooms.bind(this);
 		this.updateChildAge = this.updateChildAge.bind(this);
 		/* Clicking outside of component -------------------------------*/
         this.setWrapperRef = this.setWrapperRef.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
 
+		this.lottaChildren = [10,11,12,13,9];
+
         // default states to keep track of. These states, when updated, will impact all that are bound to it.
 		this.state = {
-			modalDisplay: 'hidden',
+			modalDisplay: '', //hidden should be default, unless testing
 			showErrors: '',
 			errorMessages: [],
 			isMaxGuests: false,
@@ -56,13 +59,13 @@ class HotelsRoomsGuests extends Component {
 				},
 				{
 					adults: 1,
-					children: [] //no need to store count, we can use length.
+					children: []
 				}
             ],
 			roomsSavedState: [
 				{
 					adults: 1,
-					children: [] //no need to store count, we can use length.
+					children: []
 				}
             ], //so when we revert back to last saved state
         };
@@ -83,11 +86,24 @@ class HotelsRoomsGuests extends Component {
 	-------------------------------------*/
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClickOutside);
+	    document.addEventListener("keydown", (e) => { this.handKeyDownEvents(e) },false);
     }
 
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
+
+	/*-------------------------------------
+	| Keydown Events (e.g. Escape Key)
+	-------------------------------------*/
+	handKeyDownEvents(e) {
+		if(e.keyCode == 27)
+		{
+			this.resetToLastSavedState();
+		}
+	}
+
+
     setWrapperRef(node) {
         this.wrapperRef = node;
     }
@@ -131,8 +147,8 @@ class HotelsRoomsGuests extends Component {
 
     // FAT ARROW FUNCTIONS CHANGES SCOPE OF KEYWORD THIS - to be scoped to this Class. Children Containers can use it too.
 	errorMessages = () => {
-        let errorMessages = this.state.errorMessages.map((message) => {
-			return <li>{message}</li>;
+        let errorMessages = this.state.errorMessages.map((message, i) => {
+			return <li key={i}>{message}</li>;
 		});
         return errorMessages;
 	};
@@ -215,6 +231,8 @@ class HotelsRoomsGuests extends Component {
                 addSubtract_adults={this.addSubtract_adults}
                 addSubtract_children={this.addSubtract_children}
                 updateChildAge={this.updateChildAge}
+				subtract_rooms={this.subtract_rooms}
+				subtrRoomDisabled={this.state.rooms.length === 1}
             />
         ))
     }
@@ -256,7 +274,8 @@ class HotelsRoomsGuests extends Component {
 		this.setState({isMaxGuests: isMaxGuests});
 
         // check room count second - can't add room if we hit our guest max
-		let isMaxRooms = (isMaxGuests || this.state.rooms.length === this.props.maxRooms) ? true:false;
+		let isMaxRooms = (isMaxGuests || this.state.rooms.length === this.props.roomsMax) ? true:false;
+
 		this.setState({isMaxRooms: isMaxRooms});
 	}
 
@@ -264,17 +283,23 @@ class HotelsRoomsGuests extends Component {
 	| Adding and Subtracting Rooms
     | @ plusMinus str :: plus or minus
 	-------------------------------------*/
-    addSubtract_rooms = (plusMinus) => {
+    add_rooms = () => {
 		let rooms = this.state.rooms;
 
-		if (plusMinus === 'plus' && !this.state.isMaxRooms)
+		if (!this.state.isMaxRooms)
 		{
 			rooms.push({adults: 1,children: []});
 			this.isMaxRoomsAndGuests(); //after adding did we hit our max guest count?
 		}
-		else if (plusMinus === 'minus' && this.state.rooms.length !== this.props.roomsMin)
+
+        this.setState({rooms: rooms});
+    }
+    subtract_rooms = (roomIndex) => {
+		let rooms = this.state.rooms;
+
+		if (this.state.rooms.length !== this.props.roomsMin)
 		{
-			rooms.pop(); //delete last room
+			rooms.splice(roomIndex, 1); //delete this room by its index
 			this.isMaxRoomsAndGuests(); //after adding did we hit our max guest count?
 		}
 
@@ -384,14 +409,10 @@ class HotelsRoomsGuests extends Component {
 
                     <button
 						disabled={this.state.isMaxRooms}
-                        onClick={ () => this.addSubtract_rooms('plus') }
+                        onClick={ () => this.add_rooms() }
                         type="button"
                         className="roomAdd">+ Add Room</button>
-                    <button
-						disabled={this.state.rooms.length === 1}
-                        onClick={ () => this.addSubtract_rooms('minus') }
-                        type="button"
-                        className="roomMinus">- Subtract Room</button>
+
 
 					<div className="store">
 						<button
