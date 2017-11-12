@@ -43,7 +43,7 @@ class HotelsRoomsGuests extends Component {
         this.setWrapperRef = this.setWrapperRef.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
 
-		this.lottaChildren = [10,11,12,13,9];
+		this.lottaChildren = [10,11,13,9];
 
         // default states to keep track of. These states, when updated, will impact all that are bound to it.
 		this.state = {
@@ -56,10 +56,6 @@ class HotelsRoomsGuests extends Component {
 				{
 					adults: 1,
 					children: [] //no need to store count, we can use length.
-				},
-				{
-					adults: 1,
-					children: []
 				}
             ],
 			roomsSavedState: [
@@ -87,6 +83,8 @@ class HotelsRoomsGuests extends Component {
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClickOutside);
 	    document.addEventListener("keydown", (e) => { this.handKeyDownEvents(e) },false);
+
+		this.isMaxRoomsAndGuests(); //if this form is sticky, they may have already maxed it out
     }
 
     componentWillUnmount() {
@@ -379,48 +377,48 @@ class HotelsRoomsGuests extends Component {
     render() {
         return  (
             <div ref={this.setWrapperRef} className={"HotelsRoomsGuests " +  this.state.showErrors }>
-                <div
-                    onClick={ () => this.modalShow() }
-                    className="primary-text-display">
-    	            <div className="displayText">{ this.updateDisplayText() }</div>
-    	            <span className="glyphicon glyphicon-menu-down"></span>
-    	        </div>
-                <div className={"roomGuest-modal " +  this.state.modalDisplay }>
+				<div className="stats">
+					<span> <b>{ this.state.rooms.length }</b> Room(s)</span>
+					<span> <b>{ this.guestCount() }</b> Guest(s)</span>
+					<span> <b>{ this.adultCount() }</b> Adult(s)</span>
+					<span> <b>{ this.childCount() }</b> Children</span>
+				</div>
+				<div className="content">
+					<div
+	                    onClick={ () => this.modalShow() }
+	                    className="primary-text-display">
+	    	            <div className="displayText">{ this.updateDisplayText() }</div>
+	    	            <span className="glyphicon glyphicon-menu-down"></span>
+	    	        </div>
+	                <div className={"roomGuest-modal " +  this.state.modalDisplay }>
+	                    <button
+	                        onClick={ () => this.resetToLastSavedState() }
+	                        className="close">X</button>
 
-					<div className="stats">
-                        <span> <b>{ this.state.rooms.length }</b> Room(s)</span>
-                        <span> <b>{ this.guestCount() }</b> Guest(s)</span>
-                        <span> <b>{ this.adultCount() }</b> Adult(s)</span>
-                        <span> <b>{ this.childCount() }</b> Children</span>
-                    </div>
-
-                    <button
-                        onClick={ () => this.resetToLastSavedState() }
-                        className="close">X</button>
-
-					<div className="errorMessage">
-						<ul>
-							{ this.errorMessages() }
-						</ul>
-					</div>
-
-
-                    <div className="rooms">{ this.rooms_render() }</div>
-
-                    <button
-						disabled={this.state.isMaxRooms}
-                        onClick={ () => this.add_rooms() }
-                        type="button"
-                        className="roomAdd">+ Add Room</button>
+						<div className="errorMessage">
+							<ul>
+								{ this.errorMessages() }
+							</ul>
+						</div>
 
 
-					<div className="store">
-						<button
-	                        onClick={ () => this.storeState() }
-	                        type="button">Continue</button>
-					</div>
+	                    <div className="rooms">{ this.rooms_render() }</div>
 
-                </div>
+	                    <button
+							disabled={this.state.isMaxRooms}
+	                        onClick={ () => this.add_rooms() }
+	                        type="button"
+	                        className="roomAdd">+ Add Room</button>
+
+
+						<div className="store">
+							<button
+		                        onClick={ () => this.storeState() }
+		                        type="button">Continue</button>
+						</div>
+
+	                </div>
+				</div>
             </div>
         );
     }

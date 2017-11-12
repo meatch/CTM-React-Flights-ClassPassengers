@@ -1,16 +1,24 @@
+.HotelsRoomsGuests {
+	font-family: Georgia, serif;
+}
+
+.content {
+	width: 321px;
+	margin: auto;
+}
+
 .primary-text-display {
 	border: solid 1px #eee;
 	border-radius: 5px;
-	padding: 5px;
+	padding: 10px 20px;
 	position: relative;
 	padding-right: 50px;
-
 	font-size: 20px;
 }
 
 .primary-text-display .glyphicon-menu-down {
 	position: absolute;
-	right: 10px; top: 6px;
+	right: 18px; top: 13px;
 	font-size: 27px;
 	color: #7b7676;
 }
@@ -18,10 +26,29 @@
 .roomGuest-modal {
 	/*display: none;*/
 	background-color: #831061;
-	padding: 20px;
-	border-radius: 20px;
+	padding: 22px 16px 0;
+	border-radius: 5px;
 	margin: 20px 0px;
 	color: white;
+
+	position: relative;
+	top: -10px;
+}
+
+.roomGuest-modal:before {
+	content: " ";
+	display: block;
+	font-size: 0px;
+
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #831061;
+	/*border-bottom: 10px solid red;*/
+
+	position: absolute;
+	right: 10%; top: -10px;
 }
 
 button, input {
@@ -29,16 +56,23 @@ button, input {
 }
 
 button.close {
-	float: none;
+	outline: solid 1px white;
+	position: absolute;
+	right: 15px; top: 15px;
+
 	display: block;
-	text-align: right;
 	color: white;
 	opacity: .7;
-	margin-bottom: 25px;
-	width: 100%;
+	width: 22px;
+	line-height: 22px;
+	font-size: 22px;
+
+	font-family: Arial, sans-serif;
+	font-weight: normal;
 }
-button.close:hover {
+button.close:focus, button.close:hover {
 	opacity: 1;
+	color: white;
 }
 
 button:disabled {
@@ -46,46 +80,77 @@ button:disabled {
 }
 
 .room {
-	border-top: solid 2px #630a49;
-	border-bottom: solid 2px #630a49;
-	margin: 20px 0px;
-	padding: 10px 20px 20px ;
+	margin-bottom: 31px;
 }
-.room h2 { margin: 0px; }
+.room .title h1 {
+	display: inline;
+	margin: 0 15px 0 0;
+	font-size: 18px;
+	line-height: 22px;
+}
 
 .done {
 	text-decoration:line-through;
 	opacity: .5;
 }
 
-.peopleCount {
-	background-color: white;
-	display: inline-block;
-	width: 50px;
-	color: black;
-	text-align: center;
+.addSubtractAdultsChildren .set { }
+.addSubtractAdultsChildren .set.adults {
+	border-top: 1px solid rgba(255,255,255,.20);
+	border-bottom: 1px solid rgba(255,255,255,.20);
+	padding: 10px 0px;
+}
+.addSubtractAdultsChildren .set.children {
+	border-bottom: 1px solid rgba(255,255,255,.20);
+	padding: 10px 0px;
+}
+.addSubtractAdultsChildren .set label {
+	font-family: Verdana, sans-serif;
+	font-weight: 400;
+	float: left;
 	font-size: 14px;
+	line-height: 22px;
 }
-.addSubtract {
-	margin-right: 10px;
+.addSubtractAdultsChildren .set .controls { float: right; }
+.addSubtractAdultsChildren .set .controls button {
+	width: 22px;
+	height: 22px;
+	line-height: 18px;
+	color: white;
+	border: solid 1px white;
+	border-radius: 50%;
+	background-color: transparent;
+	font-size: 12px;
 }
 
-.addSubtractAdultsChildren {
-	display: flex;
-}
-.addSubtractAdultsChildren .set {
-	width: 30%;
+.addSubtractAdultsChildren .set .controls .peopleCount {
+	display: inline-block;
+	width: 30px;
+	text-align: center;
+	font-size: 18px;
+	font-family: Verdana, sans-serif;
+
+	position: relative;
+    top: 3px;
 }
 
-.ages  .child {
+
+
+
+.addSubtractAdultsChildren .set .ages { clear: both; }
+.addSubtractAdultsChildren .set .ages label {
+	font-family: Verdana, sans-serif;
+	font-weight: 400;
+	float: none;
+	display: block;
+	font-size: 11px;
+	line-height: 14px;
+}
+.addSubtractAdultsChildren .set .ages select {
 	width: 50px;
+	display: inline-block;
 }
 
-.stats {
-	margin-bottom: 20px;
-	text-align: center; font-size: 20px; color: rgba(255,255,255,.7);
-}
-.stats b { font-size: 40px; color: white; }
 
 .errorMessage { display: none; }
 .showErrors .errorMessage {
@@ -94,4 +159,63 @@ button:disabled {
 .showErrors .missing {
 	outline: solid 3px red;
 }
+
+
+
+
+.cf:before, .cf:after { content: " "; display: table; }
+.cf:after { clear: both; }
+.cf { *zoom: 1; }
+
+
+
+
+.stats {
+	display: block;
+	margin-bottom: 20px;
+	text-align: center; font-size: 18px; color: rgba(0,0,0,.7);
+}
+.stats b { font-size: 30px; color: black; }
+
+
+
+button.roomAdd, button.roomMinus {
+	background-color: transparent;
+	color: white;
+
+	font-family: Verdana, sans-serif;
+	font-size: 11px;
+	line-height: 22px;
+
+	outline: none;
+	border: none;
+
+	padding: 5px 5px 5px 0px;
+
+}
+button.roomAdd {
+	margin-bottom: 12px;
+}
+
+.store {
+	border-top: 1px solid #AE2573;
+	padding: 14px;
+	margin: 0px -16px;
+}
+.store button {
+	display: block;
+	border: solid 2px white;
+	border-radius: 5px;
+	padding: 10px 15px;
+	text-align: center;
+	background-color: transparent;
+	width: 100%;
+	color: white;
+
+	font-size: 18px;
+	font-family: Verdana, sans-serif;
+
+	opacity: .8;
+}
+.store button:hover { opacity: 1; }
 

@@ -45,6 +45,20 @@ const Room = (room) => {
             className="roomMinus">- Remove</button>
     }
 
+    /*-------------------------------------
+    | Child Ages Label
+    -------------------------------------*/
+    let agesLabel = '';
+    console.log(room.children);
+    if (room.children.length === 1)
+    {
+        agesLabel = <label>Child age at check in</label>;
+    }
+    else if (room.children.length > 1)
+    {
+        agesLabel = <label>Child ages at check in</label>;
+    }
+
     return (
         <div className="room">
             <div className="title">
@@ -52,7 +66,7 @@ const Room = (room) => {
                 { removeRoomButton }
             </div>
             <div className="addSubtractAdultsChildren">
-                <div className="set">
+                <div className="set adults cf">
                     <label className="adults">Adults (18-64)</label>
                     <div className="controls addSubtract">
                         <button
@@ -71,7 +85,7 @@ const Room = (room) => {
                         >+</button>
                     </div>
                 </div>
-                <div className="set">
+                <div className="set children cf">
                     <label className="children">Children (0-17)</label>
                     <div className="controls addSubtract">
                         <button
@@ -89,6 +103,7 @@ const Room = (room) => {
                         >+</button>
                     </div>
                     <div className="ages">
+                        {agesLabel}
                         { childAgeSelects }
                     </div>
                 </div>
