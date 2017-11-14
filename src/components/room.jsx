@@ -13,7 +13,7 @@ const Room = (room) => {
         return (
             <select
                 key={i}
-                className={"child form-control" +  missing}
+                className={"child" +  missing}
                 name="children[]"
                 value={child}
                 onChange={ (event) => room.updateChildAge(room.index, i, parseInt(event.target.value)) }

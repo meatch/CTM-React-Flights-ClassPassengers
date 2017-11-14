@@ -55,7 +55,7 @@ class HotelsRoomsGuests extends Component {
 			rooms: [
 				{
 					adults: 1,
-					children: [] //no need to store count, we can use length.
+					children: [1, 2, 10, 11, 12] //no need to store count, we can use length.
 				}
             ],
 			roomsSavedState: [
