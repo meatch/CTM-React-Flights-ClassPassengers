@@ -2,36 +2,28 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Hotels :: React</title>
+        <title>Flights Class Passenger Modal :: React</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="./css/hotel_room_guests.css">
+        <link rel="stylesheet" href="./css/flight_class_passenger.css">
     </head>
     <body>
         <div class="container">
-            <h1>Hotels :: React</h1>
+            <h1>Flights Class Passenger Modal :: React</h1>
 
             <div class="busReq">
                 <p>Requirements/Todo</p>
                 <ol>
-                    <li class="done">Cannot exceed 4 Rooms</li>
-                    <li class="done">At least 1 Adult per room</li>
-                    <li class="done">Cannot exceed 6 Guests (adults and children combined)</li>
-                    <li class="done">Users need to select children ages if there are children</li>
-                    <li class="done">Update Display text Field Number of rooms and guests</li>
-                    <li class="done">Save and Reset to Last Saved State</li>
-                    <li class="done">Show Hide modal ES6 SANS jQuery</li>
-                    <li class="done">On Save, Validate Child Ages, must be chosen, default --</li>
-                    <li class="done">Disable and enable buttons based on state.</li>
-                    <li class="done">Allow user to click window scrollbars</li>
-                    <li class="done">Warning: Use the `defaultValue` or `value` props on select tag instead of setting `selected` on option tag.</li>
-                    <li class="done">Remove room button room specific</li>
-                    <li class="done">Styling</li>
-                    <li class="done">Integrate into CTM</li>
-                    <li class="done">Add Form Fields to match what we send to back end</li>
+                    <li class="done">Adults (18-64)</li>
+                    <li class="done">Seniors (65+)</li>
+                    <li class="done">Children (2-17), must provide ages as well</li>
+                    <li class="done">Default selection: 1 Adult, Economy</li>
+                    <li class="done">Selecting values in popover modal for passenger selections will update the output value. When the user selects multiple passengers of a single passenger type, the input field will display that passenger type (e.g., "2 Seniors"). If and only if the user selects passengers of different types will the input read "(X) Passengers".</li>
+                    <li class="done">User can select up to 8 passengers, with a minimum of 1 adult or senior.</li>
+                    <li class="done">For all popovers: Clicking outside or clicking "Continue" saves the current selections. Clicking "X" acts as a cancel and reverts to the last saved selections.</li>
                 </ol>
             </div>
 
-            <div class="HotelsRoomsGuests"></div>
+            <div class="FlightsClassPassenger"></div>
         </div>
 
         <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
