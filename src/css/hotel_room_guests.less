@@ -1,0 +1,312 @@
+// out: ./hotel_room_guests.css, sourcemap: true, compress: false
+
+.HotelsRoomsGuests {
+	font-family: Georgia, serif;
+
+    display: inline-block;
+    width: 210px;
+    margin-left: 15px; /*Had to make upf or check in cehckout discrepancies*/
+    margin-right: 24px;
+
+    position: relative;
+    top: 1px;
+
+	/*---------------------------
+	| Clearfix hack
+	---------------------------*/
+	.cf:before, .cf:after { content: " "; display: table; }
+	.cf:after { clear: both; }
+	.cf { *zoom: 1; }
+
+	/*---------------------------
+	| Process and feedback
+	---------------------------*/
+	.done {
+		text-decoration:line-through;
+		opacity: .5;
+	}
+	.stats {
+		display: none;
+		margin-bottom: 20px;
+		text-align: center; font-size: 18px; color: rgba(0,0,0,.7);
+		b { font-size: 30px; color: black; }
+	}
+
+
+	.content {
+		width: 100%;
+		margin: auto;
+
+		position: relative;
+	}
+
+	.primary-text-display {
+		border: 2px solid #CFD1D7;
+		border-radius: 2px;
+		padding: 10px;
+		position: relative;
+		padding-right: 50px;
+		font-size: 16px;
+		height: 46px;
+		font-family: Verdana, Geneva, sans-serif;
+
+		.glyphicon-menu-down {
+			position: absolute;
+		    right: 12px;
+		    top: 12px;
+		    font-size: 18px;
+		    color: #7b7676;
+		}
+	}
+	/*---------------------------
+	| Error Messages
+	---------------------------*/
+	.errorMessage { display: none; }
+	&.showErrors {
+		.errorMessage {
+			display: block;
+			font-size: 12px;
+
+			ul {
+				margin: 0; padding: 0;
+				list-style-type: none;
+				li {
+					font-size: 12px;
+				}
+			}
+		}
+		.missing { outline: solid 3px red; }
+	}
+
+	/*---------------------------
+	| Room Guest Modal Popup
+	---------------------------*/
+	.roomGuest-modal {
+		/*display: none;*/
+		background-color: #831061;
+		padding: 32px 16px 0;
+		border-radius: 5px;
+		margin: 20px 0px;
+		color: white;
+
+		position: absolute;
+		top: 37px;
+		left: -90px;
+		width: 321px;
+
+		&:before {
+			content: " ";
+			display: block;
+			font-size: 0px;
+
+			width: 0;
+			height: 0;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-bottom: 10px solid #831061;
+			/*border-bottom: 10px solid red;*/
+
+			position: absolute;
+			right: 10%; top: -10px;
+		}
+
+
+
+		button, input {
+			color: black;
+			&.close {
+				position: absolute;
+				right: 15px; top: 15px;
+
+				display: block;
+				color: white;
+				opacity: .7;
+
+				width: 22px;
+				height: 22px;
+				background-image: url('/img/closeLrg.png');
+				background-size: contain;
+				font-size: 0;
+
+				font-family: Arial, sans-serif;
+				font-weight: normal;
+			}
+			&.close:focus, &.close:hover { opacity: 1; }
+			&:disabled { opacity: .4; }
+		}
+
+		.room {
+			margin-bottom: 31px;
+
+			&:last-child {
+				margin-bottom: 20px;
+			}
+
+			.title h1 {
+				display: inline;
+				margin: 0 15px 0px 0;
+				font-size: 18px;
+				line-height: 22px;
+				color: white;
+				font-family: Georgia, serif;
+			}
+		}
+
+		.addSubtractAdultsChildren  {
+
+			.set {
+				&.adults {
+					margin-top: 5px;
+					border-top: 1px solid rgba(255,255,255,.20);
+					padding: 10px 0px;
+					border-bottom: 1px solid rgba(255,255,255,.20);
+				}
+				&.children {
+					padding: 10px 0px;
+					border-bottom: 1px solid rgba(255,255,255,.20);
+				}
+				label {
+					font-family: Verdana, sans-serif;
+					font-weight: 400;
+					float: left;
+					font-size: 14px;
+					line-height: 22px;
+					color: white;
+					margin: 0;
+					position: relative;
+					top: 2px;
+				}
+				.controls {
+					float: right;
+					button {
+						font-size: 0;
+						background-color: transparent;
+						outline: none;
+						border: none;
+
+						width: 22px;
+						height: 22px;
+						background-size: contain;
+
+						position: relative;
+						top: -3px;
+					}
+					button.add {
+						background-image: url('/img/plus_sm.png');
+					}
+					button.subtract {
+						background-image: url('/img/minus_sm.png');
+					}
+					.peopleCount {
+						display: inline-block;
+						width: 30px;
+						text-align: center;
+						font-size: 18px;
+						line-height: 22px;
+						font-family: Verdana, sans-serif;
+
+						position: relative;
+					    top: 1px;
+					}
+				}
+
+				.ages {
+					clear: both;
+					label {
+						font-family: Verdana, sans-serif;
+						font-weight: 400;
+						float: none;
+						display: block;
+						font-size: 11px;
+						line-height: 14px;
+					}
+					select {
+
+						-webkit-appearance: none;
+						-moz-appearance: none;
+						appearance: none;       /* remove default arrow */
+
+						background-image: url('/img/dropdown.png');
+						background-size: 14px 9px;
+						background-position: 31px 12px;
+						background-repeat: no-repeat;
+
+						display: inline-block;
+
+						color: #333;
+
+						width: 53px;
+						height: 32px;
+
+						padding: 0 0 0 8px;
+						font-size: 14px;
+						line-height: 21px;
+
+						background-color: white;
+						border: 1px solid #cdcbcc;
+						border-radius: 2px;
+						cursor: pointer;
+
+						font-family: 'Lato', sans-serif;
+
+						position: relative;
+
+						margin: 2px 6px 0 0;
+					    font-size: 11px;
+
+						&:last-child {
+							margin-right: 0;
+						}
+					}
+				}
+			}
+		}
+
+
+
+		button {
+			&.roomAdd, &.roomMinus {
+				background-color: transparent;
+				color: white;
+
+				font-family: Verdana, sans-serif;
+				font-size: 11px;
+				line-height: 22px;
+
+				outline: none;
+				border: none;
+
+				padding: 5px 5px 5px 0px;
+
+			}
+			&.roomAdd {
+				margin-bottom: 12px;
+			}
+		}
+
+		.store {
+			border-top: 2px solid #610f47;
+			padding: 14px;
+			margin: 0px -16px;
+
+			button {
+				display: block;
+				border: solid 2px white;
+				border-radius: 5px;
+				padding: 10px 15px;
+				text-align: center;
+				background-color: transparent;
+				width: 100%;
+				color: white;
+
+				font-size: 18px;
+				font-family: Verdana, sans-serif;
+
+				opacity: .8;
+
+				&:hover { opacity: 1; }
+			}
+		}
+	}
+
+}

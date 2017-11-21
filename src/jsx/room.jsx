@@ -49,7 +49,6 @@ const Room = (room) => {
     | Child Ages Label
     -------------------------------------*/
     let agesLabel = '';
-    console.log(room.children);
     if (room.children.length === 1)
     {
         agesLabel = <label>Child age at check in</label>;
