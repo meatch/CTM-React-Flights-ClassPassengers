@@ -30,6 +30,7 @@
     "babel-preset-stage-1": "^6.1.18",
     "hoek": "^5.0.3",
     "lodash": "^4.17.10",
+    "querystringify": "^2.1.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-redux": "5.0.7",
